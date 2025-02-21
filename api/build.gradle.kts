@@ -13,6 +13,7 @@ dependencies {
   api(projects.adventureKey)
   api(libs.examination.api)
   api(libs.examination.string)
+  compileOnlyApi(libs.jspecify)
   compileOnlyApi(libs.jetbrainsAnnotations)
   testImplementation(libs.guava)
   annotationProcessor(projects.adventureAnnotationProcessors)

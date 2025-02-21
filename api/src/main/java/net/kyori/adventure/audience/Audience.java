@@ -52,7 +52,7 @@ import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * A receiver of Minecraft media.
@@ -101,6 +101,7 @@ import org.jetbrains.annotations.NotNull;
  * @see BossBarViewer
  * @since 4.0.0
  */
+@NullMarked
 public interface Audience extends Pointered {
   /**
    * Gets an audience that does nothing.
@@ -108,7 +109,7 @@ public interface Audience extends Pointered {
    * @return a do-nothing audience
    * @since 4.0.0
    */
-  static @NotNull Audience empty() {
+  static Audience empty() {
     return EmptyAudience.INSTANCE;
   }
 
@@ -120,7 +121,7 @@ public interface Audience extends Pointered {
    * @see ForwardingAudience
    * @since 4.0.0
    */
-  static @NotNull Audience audience(final @NotNull Audience@NotNull... audiences) {
+  static Audience audience(final Audience... audiences) {
     final int length = audiences.length;
     if (length == 0) {
       return empty();
@@ -141,7 +142,7 @@ public interface Audience extends Pointered {
    * @see ForwardingAudience
    * @since 4.0.0
    */
-  static @NotNull ForwardingAudience audience(final @NotNull Iterable<? extends Audience> audiences) {
+  static ForwardingAudience audience(final Iterable<? extends Audience> audiences) {
     return () -> audiences;
   }
 
@@ -153,7 +154,7 @@ public interface Audience extends Pointered {
    * @return a collector to create a forwarding audience
    * @since 4.0.0
    */
-  static @NotNull Collector<? super Audience, ?, ForwardingAudience> toAudience() {
+  static Collector<? super Audience, ?, ForwardingAudience> toAudience() {
     return Audiences.COLLECTOR;
   }
 
@@ -170,7 +171,7 @@ public interface Audience extends Pointered {
    * @return an audience providing a snapshot of all audiences that match the predicate when this method is invoked
    * @since 4.9.0
    */
-  default @NotNull Audience filterAudience(final @NotNull Predicate<? super Audience> filter) {
+  default Audience filterAudience(final Predicate<? super Audience> filter) {
     return filter.test(this)
       ? this
       : empty();
@@ -189,7 +190,7 @@ public interface Audience extends Pointered {
    * @param action the action
    * @since 4.9.0
    */
-  default void forEachAudience(final @NotNull Consumer<? super Audience> action) {
+  default void forEachAudience(final Consumer<? super Audience> action) {
     action.accept(this);
   }
 
@@ -204,7 +205,7 @@ public interface Audience extends Pointered {
    * @since 4.1.0
    */
   @ForwardingAudienceOverrideNotRequired
-  default void sendMessage(final @NotNull ComponentLike message) {
+  default void sendMessage(final ComponentLike message) {
     this.sendMessage(message.asComponent());
   }
 
@@ -218,7 +219,7 @@ public interface Audience extends Pointered {
    * @since 4.1.0
    */
   @SuppressWarnings("deprecation")
-  default void sendMessage(final @NotNull Component message) {
+  default void sendMessage(final Component message) {
     this.sendMessage(message, MessageType.SYSTEM);
   }
 
@@ -236,7 +237,7 @@ public interface Audience extends Pointered {
   @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
   @Deprecated
   @ForwardingAudienceOverrideNotRequired
-  default void sendMessage(final @NotNull ComponentLike message, final @NotNull MessageType type) {
+  default void sendMessage(final ComponentLike message, final MessageType type) {
     this.sendMessage(message.asComponent(), type);
   }
 
@@ -254,7 +255,7 @@ public interface Audience extends Pointered {
   @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
   @Deprecated
   @ForwardingAudienceOverrideNotRequired
-  default void sendMessage(final @NotNull Component message, final @NotNull MessageType type) {
+  default void sendMessage(final Component message, final MessageType type) {
     this.sendMessage(Identity.nil(), message, type);
   }
   /* End: system messages */
@@ -271,7 +272,7 @@ public interface Audience extends Pointered {
    */
   @Deprecated
   @ForwardingAudienceOverrideNotRequired
-  default void sendMessage(final @NotNull Identified source, final @NotNull ComponentLike message) {
+  default void sendMessage(final Identified source, final ComponentLike message) {
     this.sendMessage(source, message.asComponent());
   }
 
@@ -286,7 +287,7 @@ public interface Audience extends Pointered {
    */
   @Deprecated
   @ForwardingAudienceOverrideNotRequired
-  default void sendMessage(final @NotNull Identity source, final @NotNull ComponentLike message) {
+  default void sendMessage(final Identity source, final ComponentLike message) {
     this.sendMessage(source, message.asComponent());
   }
 
@@ -301,7 +302,7 @@ public interface Audience extends Pointered {
    */
   @Deprecated
   @ForwardingAudienceOverrideNotRequired
-  default void sendMessage(final @NotNull Identified source, final @NotNull Component message) {
+  default void sendMessage(final Identified source, final Component message) {
     this.sendMessage(source, message, MessageType.CHAT);
   }
 
@@ -316,7 +317,7 @@ public interface Audience extends Pointered {
    */
   @Deprecated
   @ForwardingAudienceOverrideNotRequired
-  default void sendMessage(final @NotNull Identity source, final @NotNull Component message) {
+  default void sendMessage(final Identity source, final Component message) {
     this.sendMessage(source, message, MessageType.CHAT);
   }
 
@@ -333,7 +334,7 @@ public interface Audience extends Pointered {
   @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
   @Deprecated
   @ForwardingAudienceOverrideNotRequired
-  default void sendMessage(final @NotNull Identified source, final @NotNull ComponentLike message, final @NotNull MessageType type) {
+  default void sendMessage(final Identified source, final ComponentLike message, final MessageType type) {
     this.sendMessage(source, message.asComponent(), type);
   }
 
@@ -350,7 +351,7 @@ public interface Audience extends Pointered {
   @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
   @Deprecated
   @ForwardingAudienceOverrideNotRequired
-  default void sendMessage(final @NotNull Identity source, final @NotNull ComponentLike message, final @NotNull MessageType type) {
+  default void sendMessage(final Identity source, final ComponentLike message, final MessageType type) {
     this.sendMessage(source, message.asComponent(), type);
   }
 
@@ -366,7 +367,7 @@ public interface Audience extends Pointered {
    */
   @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
   @Deprecated
-  default void sendMessage(final @NotNull Identified source, final @NotNull Component message, final @NotNull MessageType type) {
+  default void sendMessage(final Identified source, final Component message, final MessageType type) {
     this.sendMessage(source.identity(), message, type);
   }
 
@@ -382,7 +383,7 @@ public interface Audience extends Pointered {
    */
   @ApiStatus.ScheduledForRemoval(inVersion = "5.0.0")
   @Deprecated
-  default void sendMessage(final @NotNull Identity source, final @NotNull Component message, final @NotNull MessageType type) {
+  default void sendMessage(final Identity source, final Component message, final MessageType type) {
     // implementation required
   }
   /* End: unsigned player messages */
@@ -397,7 +398,7 @@ public interface Audience extends Pointered {
    * @sinceMinecraft 1.19
    */
   @SuppressWarnings("deprecation")
-  default void sendMessage(final @NotNull Component message, final ChatType.@NotNull Bound boundChatType) {
+  default void sendMessage(final Component message, final ChatType.Bound boundChatType) {
     this.sendMessage(message, MessageType.CHAT);
   }
 
@@ -410,7 +411,7 @@ public interface Audience extends Pointered {
    * @sinceMinecraft 1.19
    */
   @ForwardingAudienceOverrideNotRequired
-  default void sendMessage(final @NotNull ComponentLike message, final ChatType.@NotNull Bound boundChatType) {
+  default void sendMessage(final ComponentLike message, final ChatType.Bound boundChatType) {
     this.sendMessage(message.asComponent(), boundChatType);
   }
   /* End: disguised player messages
@@ -425,7 +426,7 @@ public interface Audience extends Pointered {
    * @sinceMinecraft 1.19
    */
   @SuppressWarnings("deprecation")
-  default void sendMessage(final @NotNull SignedMessage signedMessage, final ChatType.@NotNull Bound boundChatType) {
+  default void sendMessage(final SignedMessage signedMessage, final ChatType.Bound boundChatType) {
     final Component content = signedMessage.unsignedContent() != null ? signedMessage.unsignedContent() : Component.text(signedMessage.message());
     if (signedMessage.isSystem()) {
       this.sendMessage(content);
@@ -443,7 +444,7 @@ public interface Audience extends Pointered {
    * @sinceMinecraft 1.19
    */
   @ForwardingAudienceOverrideNotRequired
-  default void deleteMessage(final @NotNull SignedMessage signedMessage) {
+  default void deleteMessage(final SignedMessage signedMessage) {
     if (signedMessage.canDelete()) {
       this.deleteMessage(Objects.requireNonNull(signedMessage.signature()));
     }
@@ -456,7 +457,7 @@ public interface Audience extends Pointered {
    * @since 4.12.0
    * @sinceMinecraft 1.19
    */
-  default void deleteMessage(final SignedMessage.@NotNull Signature signature) {
+  default void deleteMessage(final SignedMessage.Signature signature) {
   }
   /* End: signed player messages */
 
@@ -468,7 +469,7 @@ public interface Audience extends Pointered {
    * @since 4.0.0
    */
   @ForwardingAudienceOverrideNotRequired
-  default void sendActionBar(final @NotNull ComponentLike message) {
+  default void sendActionBar(final ComponentLike message) {
     this.sendActionBar(message.asComponent());
   }
 
@@ -479,7 +480,7 @@ public interface Audience extends Pointered {
    * @see Component
    * @since 4.0.0
    */
-  default void sendActionBar(final @NotNull Component message) {
+  default void sendActionBar(final Component message) {
   }
 
   /**
@@ -492,7 +493,7 @@ public interface Audience extends Pointered {
    * @since 4.3.0
    */
   @ForwardingAudienceOverrideNotRequired
-  default void sendPlayerListHeader(final @NotNull ComponentLike header) {
+  default void sendPlayerListHeader(final ComponentLike header) {
     this.sendPlayerListHeader(header.asComponent());
   }
 
@@ -505,7 +506,7 @@ public interface Audience extends Pointered {
    * @param header the header
    * @since 4.3.0
    */
-  default void sendPlayerListHeader(final @NotNull Component header) {
+  default void sendPlayerListHeader(final Component header) {
     this.sendPlayerListHeaderAndFooter(header, Component.empty());
   }
 
@@ -519,7 +520,7 @@ public interface Audience extends Pointered {
    * @since 4.3.0
    */
   @ForwardingAudienceOverrideNotRequired
-  default void sendPlayerListFooter(final @NotNull ComponentLike footer) {
+  default void sendPlayerListFooter(final ComponentLike footer) {
     this.sendPlayerListFooter(footer.asComponent());
   }
 
@@ -532,7 +533,7 @@ public interface Audience extends Pointered {
    * @param footer the footer
    * @since 4.3.0
    */
-  default void sendPlayerListFooter(final @NotNull Component footer) {
+  default void sendPlayerListFooter(final Component footer) {
     this.sendPlayerListHeaderAndFooter(Component.empty(), footer);
   }
 
@@ -544,7 +545,7 @@ public interface Audience extends Pointered {
    * @since 4.3.0
    */
   @ForwardingAudienceOverrideNotRequired
-  default void sendPlayerListHeaderAndFooter(final @NotNull ComponentLike header, final @NotNull ComponentLike footer) {
+  default void sendPlayerListHeaderAndFooter(final ComponentLike header, final ComponentLike footer) {
     this.sendPlayerListHeaderAndFooter(header.asComponent(), footer.asComponent());
   }
 
@@ -555,7 +556,7 @@ public interface Audience extends Pointered {
    * @param footer the footer
    * @since 4.3.0
    */
-  default void sendPlayerListHeaderAndFooter(final @NotNull Component header, final @NotNull Component footer) {
+  default void sendPlayerListHeaderAndFooter(final Component header, final Component footer) {
   }
 
   /**
@@ -566,7 +567,7 @@ public interface Audience extends Pointered {
    * @since 4.0.0
    */
   @ForwardingAudienceOverrideNotRequired
-  default void showTitle(final @NotNull Title title) {
+  default void showTitle(final Title title) {
     final Title.Times times = title.times();
     if (times != null) this.sendTitlePart(TitlePart.TIMES, times);
 
@@ -583,7 +584,7 @@ public interface Audience extends Pointered {
    * @throws IllegalArgumentException if a title part that is not in {@link TitlePart} is used
    * @since 4.9.0
    */
-  default <T> void sendTitlePart(final @NotNull TitlePart<T> part, final @NotNull T value) {
+  default <T> void sendTitlePart(final TitlePart<T> part, final T value) {
   }
 
   /**
@@ -611,7 +612,7 @@ public interface Audience extends Pointered {
    * @see BossBar
    * @since 4.0.0
    */
-  default void showBossBar(final @NotNull BossBar bar) {
+  default void showBossBar(final BossBar bar) {
   }
 
   /**
@@ -621,7 +622,7 @@ public interface Audience extends Pointered {
    * @see BossBar
    * @since 4.0.0
    */
-  default void hideBossBar(final @NotNull BossBar bar) {
+  default void hideBossBar(final BossBar bar) {
   }
 
   /**
@@ -633,7 +634,7 @@ public interface Audience extends Pointered {
    * @see Sound
    * @since 4.0.0
    */
-  default void playSound(final @NotNull Sound sound) {
+  default void playSound(final Sound sound) {
   }
 
   /**
@@ -646,7 +647,7 @@ public interface Audience extends Pointered {
    * @see Sound
    * @since 4.0.0
    */
-  default void playSound(final @NotNull Sound sound, final double x, final double y, final double z) {
+  default void playSound(final Sound sound, final double x, final double y, final double z) {
   }
 
   /**
@@ -665,7 +666,7 @@ public interface Audience extends Pointered {
    * @param emitter an emitter
    * @since 4.8.0
    */
-  default void playSound(final @NotNull Sound sound, final Sound.@NotNull Emitter emitter) {
+  default void playSound(final Sound sound, final Sound.Emitter emitter) {
   }
 
   /**
@@ -675,7 +676,7 @@ public interface Audience extends Pointered {
    * @since 4.8.0
    */
   @ForwardingAudienceOverrideNotRequired
-  default void stopSound(final @NotNull Sound sound) {
+  default void stopSound(final Sound sound) {
     this.stopSound(Objects.requireNonNull(sound, "sound").asStop());
   }
 
@@ -686,7 +687,7 @@ public interface Audience extends Pointered {
    * @see SoundStop
    * @since 4.0.0
    */
-  default void stopSound(final @NotNull SoundStop stop) {
+  default void stopSound(final SoundStop stop) {
   }
 
   /**
@@ -699,7 +700,7 @@ public interface Audience extends Pointered {
    * @since 4.0.0
    */
   @ForwardingAudienceOverrideNotRequired
-  default void openBook(final Book.@NotNull Builder book) {
+  default void openBook(final Book.Builder book) {
     this.openBook(book.build());
   }
 
@@ -712,7 +713,7 @@ public interface Audience extends Pointered {
    * @see Book
    * @since 4.0.0
    */
-  default void openBook(final @NotNull Book book) {
+  default void openBook(final Book book) {
   }
 
   // ------------------------
@@ -730,7 +731,7 @@ public interface Audience extends Pointered {
    * @since 4.15.0
    */
   @ForwardingAudienceOverrideNotRequired
-  default void sendResourcePacks(final @NotNull ResourcePackInfoLike first, final @NotNull ResourcePackInfoLike... others) {
+  default void sendResourcePacks(final ResourcePackInfoLike first, final ResourcePackInfoLike... others) {
     this.sendResourcePacks(ResourcePackRequest.addingRequest(first, others));
   }
 
@@ -744,7 +745,7 @@ public interface Audience extends Pointered {
    * @since 4.15.0
    */
   @ForwardingAudienceOverrideNotRequired
-  default void sendResourcePacks(final @NotNull ResourcePackRequestLike request) {
+  default void sendResourcePacks(final ResourcePackRequestLike request) {
     this.sendResourcePacks(request.asResourcePackRequest());
   }
 
@@ -757,7 +758,7 @@ public interface Audience extends Pointered {
    * @see ResourcePackInfo
    * @since 4.15.0
    */
-  default void sendResourcePacks(final @NotNull ResourcePackRequest request) {
+  default void sendResourcePacks(final ResourcePackRequest request) {
   }
 
   /**
@@ -768,7 +769,7 @@ public interface Audience extends Pointered {
    * @sinceMinecraft 1.20.3
    */
   @ForwardingAudienceOverrideNotRequired
-  default void removeResourcePacks(final @NotNull ResourcePackRequestLike request) {
+  default void removeResourcePacks(final ResourcePackRequestLike request) {
     this.removeResourcePacks(request.asResourcePackRequest());
   }
 
@@ -780,7 +781,7 @@ public interface Audience extends Pointered {
    * @sinceMinecraft 1.20.3
    */
   @ForwardingAudienceOverrideNotRequired
-  default void removeResourcePacks(final @NotNull ResourcePackRequest request) {
+  default void removeResourcePacks(final ResourcePackRequest request) {
     final List<ResourcePackInfo> infos = request.packs();
     if (infos.size() == 1) {
       this.removeResourcePacks(infos.get(0).id());
@@ -804,7 +805,7 @@ public interface Audience extends Pointered {
    * @sinceMinecraft 1.20.3
    */
   @ForwardingAudienceOverrideNotRequired
-  default void removeResourcePacks(final @NotNull ResourcePackInfoLike request, final @NotNull ResourcePackInfoLike @NotNull... others) {
+  default void removeResourcePacks(final ResourcePackInfoLike request, final ResourcePackInfoLike... others) {
     final UUID[] otherReqs = new UUID[others.length];
     for (int i = 0; i < others.length; i++) {
       otherReqs[i] = others[i].asResourcePackInfo().id();
@@ -819,7 +820,7 @@ public interface Audience extends Pointered {
    * @since 4.16.0
    * @sinceMinecraft 1.20.3
    */
-  default void removeResourcePacks(final @NotNull Iterable<UUID> ids) {
+  default void removeResourcePacks(final Iterable<UUID> ids) {
     // break these out to id + arrays
     final Iterator<UUID> it = ids.iterator();
     if (!it.hasNext()) return;
@@ -852,7 +853,7 @@ public interface Audience extends Pointered {
    * @since 4.15.0
    * @sinceMinecraft 1.20.3
    */
-  default void removeResourcePacks(final @NotNull UUID id, final @NotNull UUID@NotNull... others) {
+  default void removeResourcePacks(final UUID id, final UUID... others) {
   }
 
   /**
